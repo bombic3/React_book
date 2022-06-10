@@ -1,10 +1,30 @@
-const MyComponent = () => {
-  return <div>나의 첫번째 컴포넌트!</div>
-}
-// function대신 화살표(arrow)함수 사용하여 간략하게 작성
-// 화살표 함수는 값을 연산하여 바로 반환해야 할 때 사용
+import PropTypes from 'prop-types';
 
-// 확장자 Reactjs Code Snippet 설치하면 rsc 엔터!
-// 클래스형은 rcc 엔터
+const MyComponent = ({ name, favoriteNumber, children }) => {
+  return (
+    <div>
+      안녕하세요, 제 이름은 {name}입니다.<br />
+      children 값은 {children} 입니다.<br />
+      필수! 제가 좋아하는 숫자는 {favoriteNumber}입니다.
+    </div>
+  );
+};
+
+MyComponent.defaultProps = {
+  name: '기본 이름'
+};
+// props 사용
+// props 값을 따로 지정하지 않았을 때 보여 줄 기본값 defaultProps
+// props.children
+// 비구조화 할당 문법으로 props 추출하기(props. 키워드 붙이지 않고 바로 내부값 추출)
+// 함수 컴포넌트에서 props를 사용할 때 파라미터 부분에서 비구조화 할당 문법을 사용
+
+
+MyComponent.propTypes = {
+  name: PropTypes.string,
+  favoriteNumber: PropTypes.number.isRequired
+};
+// propTypes : props의 타입 지정
+// isRequired : 필수 propTypes 설정(App.js에서 꼭 값 적기)
 
 export default MyComponent;
