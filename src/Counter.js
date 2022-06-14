@@ -41,7 +41,9 @@ class Counter extends Component {
               },
               () => {
                 console.log('방금 setState가 호출되었습니다.');
+                // 방금 setState가 호출되었습니다.
                 console.log(this.state);
+                // {number: 1, fixedNumber: 0}
               }
             );
           }}
