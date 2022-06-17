@@ -22,7 +22,7 @@ class EventPractice extends Component {
     });
   }
 
-  // 임의 메서드 handleKeyPress 추가
+  // 임의 메서드 handleKeyPress 추가, 화살표 함수로 this binding함
   handleKeyPress = (e) => {
     if (e.key === 'Enter') {
       this.handleClick();
@@ -50,6 +50,7 @@ class EventPractice extends Component {
           onChange={this.handleChange}
           onKeyPress={this.handleKeyPress}
         />
+        {/* onKeyPress={this.handleKeyPress} 이벤트 실행 */}
         {/* 입력한 값 state에 넣기 */}
         <button onClick={this.handleClick}>확인</button>
         {/* state에 넣은 값 띄우기 */}

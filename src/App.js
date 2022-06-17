@@ -1,10 +1,10 @@
 import React from 'react';
-import EventPractice from './EventPractice';
+import EventPractiveFunction from './EventPractiveFunction';
 
 const App = () => {
   return (
     <div>
-      <EventPractice />
+      <EventPractiveFunction />
     </div>
   );
 };
