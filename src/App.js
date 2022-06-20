@@ -1,10 +1,10 @@
 import React from 'react';
-import EventPractiveFunction from './EventPractiveFunction';
+import ValidationSample from './ValidationSample';
 
 const App = () => {
   return (
     <div>
-      <EventPractiveFunction />
+      <ValidationSample />
     </div>
   );
 };
