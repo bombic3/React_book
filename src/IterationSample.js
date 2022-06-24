@@ -27,10 +27,23 @@ const IterationSample = () => {
     setNextId(nextId + 1); // nextId 값에 1을 더해준다
     setNames(nextNames); // names 값을 업데이트 한다.
     setInputText(''); // inputText를 비운다.
-  }
+  };
+
+//   ### 데이터 제거 기능 구현하기
+// - 각 항목을 더블 클릭 했을 때 해당 항목 제거 기능
+// - 불변성 유지하며 업데이트 해주기 → 새로운 배열 생성, 특정 항목 지울 때 사용
+// - 배열 내장 함수 filter() : 배열에서 특정 조건을 만족하는 원소들만 쉽게 분류
+  const onRemove = id => {
+    const nextNames = names.filter(name => name.id !== id);
+    setNames(nextNames);
+  };
 
   // const nameList = names.map((name, index) => <li key={index}>{name}</li>);
-  const nameList = names.map( name => <li key={name.id}>{name.text}</li>);
+  const nameList = names.map(name => (
+    <li key={name.id} onDoubleClick={() => onRemove(name.id)}>
+      {name.text}
+    </li>
+  ));
   
   // ul 상단에 input, button 렌더링 후 input의 상태 관리하기
   return (
