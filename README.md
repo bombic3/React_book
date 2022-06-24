@@ -2331,3 +2331,314 @@ console.log(result);
 ---
 
 ## 6.2 데이터 배열을 컴포넌트 배열로 변환하기
+
+IterationSample.js
+
+```jsx
+import React from 'react';
+
+**// map() 사용했지만 key 값이 없다며 에러 뜸**
+const IterationSample = () => {
+  const names = ['눈사람', '얼음', '눈', '바람'];
+  const nameList = names.map(name => <li>{name}</li>);
+  return <ul>{nameList}</ul>;
+
+  // return (
+  //   <div>
+  //     <ul>
+  //       <li>눈사람</li>
+  //       <li>얼음</li>
+  //       <li>눈</li>
+  //       <li>바람</li>
+  //     </ul>
+  //   </div>
+  // );
+};
+
+export default IterationSample;
+```
+
+App.js
+
+```jsx
+import React, { Component } from "react";
+import IterationSample from "./IterationSample";
+
+class App extends Component {
+  render() {
+    return (
+      <div>
+        <IterationSample />
+      </div>
+    );
+  }
+}
+
+export default App;
+```
+
+---
+
+## 6.3 key 사용 이유
+
+- 리액트에서 key는 컴포넌트 배열을 렌더링했을 때 어떤 원소에 변동이 있었는지 알아내려고 사용
+
+### 6.3.1 key 설정
+
+- key 값 설정 시 map 함수의 인자로 전달되는 함수 내부에서 컴포넌트 props를 설정하듯이 설정
+- key 값은 언제나 유일한 값(고유값)으로 설정
+- 고유 번호가 없을 때는 map 함수에 전달되는 콜백 함수의 인수인 index 값을 사용
+- 고유값 없을 때만 index 사용. index를 key로 사용하면 배열이 변경될 때 효울적으로 리렌더링하지 못 함
+
+IterationSample.js
+
+```jsx
+import React from 'react';
+
+// map() 사용했지만 key 값이 없다며 에러 뜸
+**// key 고유값 없을 때만 index 넣어주기
+// index를 key로 사용하면 배열이 변경될 때 효울적으로 리렌더링하지 못 함**
+const IterationSample = () => {
+  const names = ['눈사람', '얼음', '눈', '바람'];
+  const nameList = names.map((name, **index**) => <li **key={index}**>{name}</li>);
+  return <ul>{nameList}</ul>;
+
+export default IterationSample;
+```
+
+App.js
+
+```jsx
+import React, { Component } from "react";
+import IterationSample from "./IterationSample";
+
+class App extends Component {
+  render() {
+    return (
+      <div>
+        <IterationSample />
+      </div>
+    );
+  }
+}
+
+export default App;
+```
+
+---
+
+## 6.4 map() 과 key값 응용
+
+### 6.4.1 초기 상태 설정하기(id로 고유값 부여)
+
+- map() 함수 고유한 key 값 index 대신 [name.id](http://name.id/) 값으로 지정
+
+```jsx
+import React, { useState } from 'react';
+
+**// map() 함수 고유한 key 값 index 대신 name.id 값으로 지정**
+const IterationSample = () => {
+  **const [names, setNames] = useState([
+    { id: 1, text: '눈사람' },
+    { id: 2, text: '얼음' },
+    { id: 3, text: '눈' },
+    { id: 4, text: '바람' },
+  ]);**
+  **const [inputText, setInputText] = useState('');
+  const [nextId, setNextId] = useState(5); // 새로운 항목을 추가할 때 사용할 id**
+
+  // const names = ['눈사람', '얼음', '눈', '바람'];
+  // const nameList = names.map((name, index) => <li key={index}>{name}</li>);
+  const nameList = names.map( name => <li key={name.id}>{name.text}</li>);
+
+  return <ul>{nameList}</ul>;
+
+};
+
+export default IterationSample;
+```
+
+### 6.4.2 데이터 추가 기능 구현 - 새로운 list 등록 기능 + button 클릭 시 기존 input 내용 비우기 기능 구현
+
+- ul 상단에 input, button 렌더링 후 input의 상태 관리하기
+
+IterationSample.js
+
+```jsx
+import React, { useState } from 'react';
+
+// map() 함수 고유한 key 값 index 대신 name.id 값으로 지정
+const IterationSample = () => {
+  const [names, setNames] = useState([
+    { id: 1, text: '눈사람' },
+    { id: 2, text: '얼음' },
+    { id: 3, text: '눈' },
+    { id: 4, text: '바람' },
+  ]);
+  const [inputText, setInputText] = useState('');
+  const [nextId, setNextId] = useState(5); // 새로운 항목을 추가할 때 사용할 id
+  // const names = ['눈사람', '얼음', '눈', '바람'];
+
+  **const onChange = e => setInputText(e.target.value);**
+
+  // const nameList = names.map((name, index) => <li key={index}>{name}</li>);
+  const nameList = names.map( name => <li key={name.id}>{name.text}</li>);
+
+  **// ul 상단에 input, button 렌더링 후 input의 상태 관리하기**
+  return (
+    <>
+      **<input value={inputText} onChange={onChange} />
+      <button>추가</button>**
+      <ul>{nameList}</ul>
+    </>
+  );
+};
+
+export default IterationSample;
+```
+
+---
+
+- 버튼 클릭시 호출할 onClick 함수 선언하여 button onClick 이벤트 설정
+- onClick 함수에서는 배열의 내장 함수 concat 사용하여 새로운 항목을 추가한 배열 만들고
+- setNames통해 상태 업데이트
+- concat : 새로운 배열을 만듦 ( ≠ push : 기존 배열 변경)
+- button이 클릭될 때 기존의 input 내용을 비우는 것도 구현
+
+IterationSample.js
+
+```jsx
+import React, { useState } from 'react';
+
+// map() 함수 고유한 key 값 index 대신 name.id 값으로 지정
+const IterationSample = () => {
+  const [names, setNames] = useState([
+    { id: 1, text: '눈사람' },
+    { id: 2, text: '얼음' },
+    { id: 3, text: '눈' },
+    { id: 4, text: '바람' },
+  ]);
+  const [inputText, setInputText] = useState('');
+  const [nextId, setNextId] = useState(5); // 새로운 항목을 추가할 때 사용할 id
+  // const names = ['눈사람', '얼음', '눈', '바람'];
+
+  const onChange = e => setInputText(e.target.value);
+
+  **// - 버튼 클릭시 호출할 onClick 함수 선언하여 button onClick 이벤트 설정
+  // - onClick 함수에서는 배열의 내장 함수 concat 사용하여 새로운 항목을 추가한 배열 만들고
+  // - setNames통해 상태 업데이트
+  // - concat : 새로운 배열을 만듦 ( ≠ push : 기존 배열 변경)
+  // - button이 클릭될 때 기존의 input 내용을 비우는 것도 구현
+  const onClick = () => {
+    const nextNames = names.concat({
+      id: nextId, // nextId 값을 id로 설정하고
+      text: inputText
+    });
+    setNextId(nextId + 1); // nextId 값에 1을 더해준다
+    setNames(nextNames); // names 값을 업데이트 한다.
+    setInputText(''); // inputText를 비운다.
+  }**
+
+  // const nameList = names.map((name, index) => <li key={index}>{name}</li>);
+  const nameList = names.map( name => <li key={name.id}>{name.text}</li>);
+
+  // ul 상단에 input, button 렌더링 후 input의 상태 관리하기
+  return (
+    <>
+      <input value={inputText} onChange={onChange} />
+      <button **onClick={onClick}**>추가</button>
+      <ul>{nameList}</ul>
+    </>
+  );
+};
+
+export default IterationSample;
+```
+
+- 리액트에서 상태를 업데이트 할 때는 기존 상태를 그대로 두면서 새로운 값을 상태로 설정해야 함
+  → 불변성 유지 : 나중에 리액트 컴포넌트의 성능을 최적화할 수 있음
+
+---
+
+### 6.4.3 데이터 제거 기능 구현하기
+
+- 각 항목을 더블 클릭 했을 때 해당 항목 제거 기능
+- 불변성 유지하며 업데이트 해주기 → 새로운 배열 생성, 특정 항목 지울 때 사용
+  - 배열 내장 함수 filter() : 배열에서 특정 조건을 만족하는 원소들만 쉽게 분류
+
+IterationSample.js
+
+```jsx
+import React, { useState } from 'react';
+
+// map() 함수 고유한 key 값 index 대신 name.id 값으로 지정
+const IterationSample = () => {
+  const [names, setNames] = useState([
+    { id: 1, text: '눈사람' },
+    { id: 2, text: '얼음' },
+    { id: 3, text: '눈' },
+    { id: 4, text: '바람' },
+  ]);
+  const [inputText, setInputText] = useState('');
+  const [nextId, setNextId] = useState(5); // 새로운 항목을 추가할 때 사용할 id
+  // const names = ['눈사람', '얼음', '눈', '바람'];
+
+  const onChange = e => setInputText(e.target.value);
+
+  // - 버튼 클릭시 호출할 onClick 함수 선언하여 button onClick 이벤트 설정
+  // - onClick 함수에서는 배열의 내장 함수 concat 사용하여 새로운 항목을 추가한 배열 만들고
+  // - setNames통해 상태 업데이트
+  // - concat : 새로운 배열을 만듦 ( ≠ push : 기존 배열 변경)
+  // - button이 클릭될 때 기존의 input 내용을 비우는 것도 구현
+  const onClick = () => {
+    const nextNames = names.concat({
+      id: nextId, // nextId 값을 id로 설정하고
+      text: inputText
+    });
+    setNextId(nextId + 1); // nextId 값에 1을 더해준다
+    setNames(nextNames); // names 값을 업데이트 한다.
+    setInputText(''); // inputText를 비운다.
+  };
+
+**//   ### 데이터 제거 기능 구현하기
+// - 각 항목을 더블 클릭 했을 때 해당 항목 제거 기능
+// - 불변성 유지하며 업데이트 해주기 → 새로운 배열 생성, 특정 항목 지울 때 사용
+// - 배열 내장 함수 filter() : 배열에서 특정 조건을 만족하는 원소들만 쉽게 분류
+  const onRemove = id => {
+    const nextNames = names.filter(name => name.id !== id);
+    setNames(nextNames);
+  };**
+
+  // const nameList = names.map((name, index) => <li key={index}>{name}</li>);
+  const nameList = names.map(name => (
+    <li key={name.id} **onDoubleClick={() => onRemove(name.id)}**>
+      {name.text}
+    </li>
+  ));
+
+  // ul 상단에 input, button 렌더링 후 input의 상태 관리하기
+  return (
+    <>
+      <input value={inputText} onChange={onChange} />
+      <button onClick={onClick}>추가</button>
+      <ul>{nameList}</ul>
+    </>
+  );
+};
+
+export default IterationSample;
+```
+
+---
+
+# ⭐️⭐️⭐️정리(배열 렌더링 map(), key값 사용, 배열 직접 접근x concat, filter 사용⭐️⭐️⭐️
+
+- 반복되는 데이터 렌더링 → 유동적인 배열 다룰 시 컴포넌트 배열 렌더링 할 때 key 값 설정!! 고유값으로
+- key 값 설정 시 map 함수의 인자로 전달되는 함수 내부에서 컴포넌트 props를 설정하듯이 설정
+- key 값은 언제나 유일한 값(고유값)으로 설정(중복X)
+- 고유 번호가 없을 때는 map 함수에 전달되는 콜백 함수의 인수인 index 값을 사용(최후의 방법)
+- 고유값 없을 때만 index 사용. index를 key로 사용하면 배열이 변경될 때 효울적으로 리렌더링하지 못 함
+- 상태 안에서 배열 변형 시 배여러에 직접 접근하지X
+- concat, filter 등의 배열 내장 함수 사용 → 새로운 배열 생성 후 이를 새로운 상태로 설정
+
+---
