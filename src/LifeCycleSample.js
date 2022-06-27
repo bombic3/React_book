@@ -68,17 +68,29 @@ class LifeCycleSample extends Component {
       color: this.props.color
     };
 
+    // return (
+    //   <div>
+    //     <h1 style={style} ref={ref => this.myRef=ref}>
+    //       {this.state.number}
+    //     </h1>
+    //     <p>color: {this.state.color}</p>
+    //     <button onClick={this.handleClick}>
+    //       더하기
+    //     </button>
+    //   </div>
+    // );
+
+    // 의도적으로 에러 발생시키기 - 존재하지 않는 props인 missing객체의 value 조회해서 렌더링
     return (
       <div>
-        <h1 style={style} ref={ref => this.myRef=ref}>
+        {this.props.missing.value}
+        <h1 style={style} ref={ref => (this.myRef = ref)}>
           {this.state.number}
         </h1>
         <p>color: {this.state.color}</p>
-        <button onClick={this.handleClick}>
-          더하기
-        </button>
+        <button onClick={this.handleClick}>더하기</button>
       </div>
-    );
+    )
   }
 }
 // React.StrictMode가 적용돼 있으면 일부 라이브사이클 두 번씩 호출 됨
