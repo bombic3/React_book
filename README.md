@@ -2960,6 +2960,46 @@ class App extends Component {
 export default App;
 ```
 
+- 콘솔창
+- ---------새로고침------------
+  constructor
+  constructor
+  getDerivedStateFromProps
+  getDerivedStateFromProps
+  render
+  render
+  componentDidMount
+  componentWillUnmount
+  componentDidMount
+  ----------더하기 버튼 클릭------------
+  getDerivedStateFromProps
+  getDerivedStateFromProps
+  shouldComponentUpdate {color: '#000000'} {number: 1, color: '#000000'}
+  shouldComponentUpdate {color: '#000000'} {number: 1, color: '#000000'}
+  render
+  render
+  getSnapshotBeforeUpdate
+  componentDidUpdate {color: '#000000'} {number: 0, color: '#000000'}
+  ----------랜덤 색상 클릭------------
+  getDerivedStateFromProps
+  getDerivedStateFromProps
+  shouldComponentUpdate {color: '#8b75d0'} {number: 1, color: '#8b75d0'}
+  shouldComponentUpdate {color: '#8b75d0'} {number: 1, color: '#8b75d0'}
+  render
+  render
+  getSnapshotBeforeUpdate
+  componentDidUpdate {color: '#000000'} {number: 1, color: '#000000'}
+  없데이트되기 직전 생상: rgb(0, 0, 0)
+  ----------더하기 버튼 클릭------------
+  getDerivedStateFromProps
+  getDerivedStateFromProps
+  shouldComponentUpdate {color: '#8b75d0'} {number: 2, color: '#8b75d0'}
+  shouldComponentUpdate {color: '#8b75d0'} {number: 2, color: '#8b75d0'}
+  render
+  render
+  getSnapshotBeforeUpdate
+  componentDidUpdate {color: '#8b75d0'} {number: 1, color: '#8b75d0'}
+
 ---
 
 ### 7.3.3 에러 잡아내기
